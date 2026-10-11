@@ -18,5 +18,8 @@
     "ffmpeg-static": "^5.2.0",
     "music-metadata": "^11.16.1",
     "three": "^0.180.0"
+  },
+  "allowScripts": {
+    "ffmpeg-static": true
   }
 }

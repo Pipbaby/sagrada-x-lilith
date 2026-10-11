@@ -1,0 +1,6 @@
+*.bat text eol=crlf
+*.command text eol=lf
+*.glb binary
+*.rgbe binary
+*.opus binary
+*.webp binary

@@ -1,0 +1,22 @@
+{
+  "name": "sagrada-x-lilith",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "description": "A walkable real-time recreation of the Sagrada Família interior — light, shadow and your own music — with an optional Evangelion layer.",
+  "license": "SEE LICENSE IN LICENSE",
+  "author": "Pipbaby",
+  "scripts": {
+    "start": "node server.mjs",
+    "scan": "node tools/scan-library.mjs",
+    "test": "node --test \"tests/*.test.mjs\""
+  },
+  "engines": {
+    "node": ">=20"
+  },
+  "dependencies": {
+    "ffmpeg-static": "^5.2.0",
+    "music-metadata": "^11.16.1",
+    "three": "^0.180.0"
+  }
+}

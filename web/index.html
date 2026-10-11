@@ -1,0 +1,93 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Sagrada × Lilith</title>
+    <link rel="stylesheet" href="/style.css" />
+    <script type="importmap">
+      {
+        "imports": {
+          "three": "/vendor/three/build/three.module.js",
+          "three/addons/": "/vendor/three/examples/jsm/"
+        }
+      }
+    </script>
+  </head>
+  <body>
+    <canvas id="view"></canvas>
+    <div id="crosshair"></div>
+    <div id="loading"><div><b>Sagrada Família</b><span id="loading-step" data-i18n="load.columns">Raising the columns…</span></div></div>
+
+    <div id="top">
+      <div id="exhibition"></div>
+      <div class="buttons">
+        <button id="open-library" data-i18n-title="top.library.tip" data-i18n="top.library">Library</button>
+        <button id="open-settings" data-i18n-title="top.settings" data-i18n="top.settings">Settings</button>
+        <button id="open-help" data-i18n-title="top.help.tip">?</button>
+      </div>
+    </div>
+
+    <div id="hover" hidden></div>
+    <div id="toast"></div>
+
+    <aside id="library"></aside>
+
+    <footer>
+      <div id="now"></div>
+      <div id="hud">
+        <div class="time">
+          <span class="sun">☀</span>
+          <input id="time" type="range" min="0" max="24" step="any" data-i18n-aria="time.aria" />
+          <button id="time-cycle" aria-pressed="false">▶</button>
+          <label class="pace" data-i18n-title="time.pace">
+            <input id="time-pace" type="range" min="0" max="8" step="1" data-i18n-aria="time.pace.aria" />
+            <output id="time-pace-label" for="time-pace"></output>
+          </label>
+          <span id="time-label"></span>
+          <button id="time-live" data-i18n-title="time.live.tip" data-i18n="time.live">Live</button>
+        </div>
+        <span id="fps"></span>
+      </div>
+    </footer>
+
+    <section id="settings" hidden>
+      <h3 data-i18n="set.title">Settings</h3>
+      <label><span data-i18n="set.reverb">Nave reverb</span> <input id="set-reverb" type="range" min="0" max="1" step="0.05" /><output for="set-reverb"></output></label>
+      <label><span data-i18n="set.exposure">Exposure</span> <input id="set-exposure" type="range" min="-2" max="2" step="0.1" list="exposure-ticks" /><output for="set-exposure"></output></label>
+      <datalist id="exposure-ticks"><option value="0"></option></datalist>
+      <label><span data-i18n="set.shafts">Light shafts</span> <input id="set-shafts" type="range" min="0" max="2" step="0.1" list="shaft-ticks" /><output for="set-shafts"></output></label>
+      <datalist id="shaft-ticks"><option value="1"></option></datalist>
+      <label data-i18n-title="set.canopy.tip"><span data-i18n="set.canopy">Altar canopy</span> <input id="set-canopy" type="checkbox" /><output for="set-canopy"></output></label>
+      <label data-i18n-title="set.railings.tip"><span data-i18n="set.railings">Gallery railings</span> <input id="set-railings" type="checkbox" /><output for="set-railings"></output></label>
+      <label data-i18n-title="set.dogma.tip"><span data-i18n="set.dogma">Terminal Dogma</span> <input id="set-dogma" type="checkbox" /><output for="set-dogma"></output></label>
+      <label><span data-i18n="set.day">Day of year</span> <input id="set-day" type="range" min="1" max="365" step="1" /><span id="set-day-label"></span></label>
+      <label><span data-i18n="set.quality">Quality</span>
+        <select id="set-quality"><option value="high" data-i18n="set.quality.high">High</option><option value="low" data-i18n="set.quality.low">Low (integrated GPUs)</option></select>
+      </label>
+      <p class="note" data-i18n="set.quality.note">Quality applies after reloading.</p>
+      <button id="reset-settings" data-i18n-title="set.reset.tip" data-i18n="set.reset">Reset to defaults</button>
+      <button id="close-settings" data-i18n="set.done">Done</button>
+    </section>
+
+    <section id="help">
+      <h3 data-i18n="help.title">Walking the basilica</h3>
+      <ul>
+        <li data-i18n-html="help.look"></li>
+        <li data-i18n-html="help.walk"></li>
+        <li data-i18n-html="help.crouch"></li>
+        <li data-i18n-html="help.sit"></li>
+        <li data-i18n-html="help.fly"></li>
+        <li data-i18n-html="help.stairs"></li>
+        <li data-i18n-html="help.covers"></li>
+        <li data-i18n-html="help.keys"></li>
+        <li data-i18n-html="help.time"></li>
+        <li data-i18n-html="help.light"></li>
+      </ul>
+      <p class="credits" data-i18n-html="help.credits"></p>
+      <button id="close-help" data-i18n="help.close">Close</button>
+    </section>
+
+    <script type="module" src="/src/main.js"></script>
+  </body>
+</html>

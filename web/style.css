@@ -133,3 +133,8 @@ body.help-open #help { display: block; }
 #library .lf-manual input { flex: 1; min-width: 0; background: #0e0c0a; color: var(--ink); border: 1px solid var(--line); border-radius: 6px; padding: 5px 8px; font: inherit; }
 #library .lf-status { margin-top: 4px; color: var(--faint); }
 #library .lf-status.error { color: #e0806a; }
+
+#mousehint { position: fixed; left: 50%; bottom: 92px; transform: translateX(-50%); max-width: calc(100vw - 32px); padding: 6px 14px; border-radius: 999px; background: var(--panel); backdrop-filter: blur(8px); color: var(--muted); font-size: 13px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; opacity: 0; transition: opacity 0.6s ease; pointer-events: none; z-index: 5; }
+#mousehint.on { opacity: 1; }
+#mousehint b { color: var(--ink); font-weight: 500; }
+#mousehint kbd { font: inherit; color: var(--ink); border: 1px solid var(--line); border-radius: 4px; padding: 0 5px; margin: 0 1px; }

@@ -462,6 +462,35 @@ document.getElementById('open-library').addEventListener('click', () => ui.toggl
 document.getElementById('open-help').addEventListener('click', () => document.body.classList.toggle('help-open'));
 document.getElementById('close-help').addEventListener('click', () => document.body.classList.remove('help-open'));
 document.addEventListener('pointerlockchange', () => document.body.classList.toggle('locked', document.pointerLockElement === canvas));
+
+// One small line above the bottom bar, only when it helps: just after the mouse is captured,
+// "Esc frees the cursor" for a few seconds (longer the first three times); while the cursor is
+// free and no panel is open, "click the scene to return". Translated, and gone when not needed.
+const mouseHint = document.getElementById('mousehint');
+let hintShown = '';
+let escUntil = 0;
+let escSeen = 0;
+try {
+  escSeen = Number(localStorage.getItem('sagrada-x-lilith.escHints')) || 0;
+} catch {}
+document.addEventListener('pointerlockchange', () => {
+  if (document.pointerLockElement !== canvas) return (escUntil = 0);
+  escUntil = performance.now() + (escSeen < 3 ? 4000 : 2000);
+  escSeen++;
+  try {
+    localStorage.setItem('sagrada-x-lilith.escHints', String(escSeen));
+  } catch {}
+});
+function updateMouseHint(now) {
+  const b = document.body.classList;
+  const panel = b.contains('library-open') || b.contains('help-open') || !document.getElementById('settings').hidden || !!document.getElementById('loading');
+  const want = b.contains('locked') ? (now < escUntil ? 'hint.esc' : '') : panel || walker.seat ? '' : 'hint.click';
+  if (want === hintShown) return;
+  hintShown = want;
+  if (want) mouseHint.innerHTML = t(want);
+  mouseHint.classList.toggle('on', !!want);
+}
+onLangChange(() => hintShown && (mouseHint.innerHTML = t(hintShown)));
 if (!state.seenHelp) {
   document.body.classList.add('help-open');
   saveState({ ...loadState(), seenHelp: true });
@@ -479,6 +508,7 @@ let fpsTime = 0;
 let elapsed = 0;
 function frame(now) {
   const realDt = (now - last) / 1000;
+  updateMouseHint(now);
   const dt = Math.min(0.05, realDt);
   last = now;
   elapsed += dt;

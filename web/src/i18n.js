@@ -209,6 +209,10 @@ const T = {
   'folder.error': ['The scan failed: {error}', '扫描失败：{error}', 'スキャンに失敗しました：{error}', 'El escaneo ha fallado: {error}'],
   'folder.note': ['Your music is only read, never changed or uploaded.', '只会读取你的音乐，不会修改或上传。', '音楽は読み込むだけで、変更もアップロードもしません。', 'Tu música solo se lee: nunca se modifica ni se sube.'],
 
+  // the mouse: captured for looking around, freed for the menus
+  'hint.esc': ['Press <kbd>Esc</kbd> to free the cursor for settings and the library', '按 <kbd>Esc</kbd> 释放鼠标，即可使用设置和音乐库', '<kbd>Esc</kbd> でカーソルを解放すると、設定やライブラリを操作できます', 'Pulsa <kbd>Esc</kbd> para liberar el cursor y usar los ajustes y la biblioteca'],
+  'hint.click': ['<b>Click</b> the scene to return to first-person view', '<b>点击</b>场景即可回到第一人称视角', 'シーンを<b>クリック</b>すると一人称視点に戻ります', '<b>Haz clic</b> en la escena para volver a la vista en primera persona'],
+
   // walking
   'walk.seated': ['Seated · look around with the mouse · E or W A S D to stand up', '已坐下 · 用鼠标环视 · 按 E 或 W A S D 起身', '着席中 · マウスで見回す · E か W A S D で立ち上がる', 'Sentado · mira con el ratón · E o W A S D para levantarte'],
   'walk.noRoom': ['No room to get out here', '这里没有空间起身离开', 'ここからは出られません', 'No hay sitio para salir por aquí'],

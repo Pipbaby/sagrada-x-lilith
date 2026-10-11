@@ -14,7 +14,9 @@ import { spawn } from 'node:child_process';
 import ffmpeg from 'ffmpeg-static';
 
 const ROOT = path.dirname(fileURLToPath(import.meta.url));
-const PORT = Number(process.env.PORT || 8770);
+// Its own port, away from other local apps (8770 is the author's private museum; 41777 Seventh Leaf).
+const BASE_PORT = Number(process.env.PORT || 41790);
+let PORT = BASE_PORT;
 const DATA = path.join(ROOT, 'data');
 const AUDIO_CACHE = path.join(DATA, 'audio-cache');
 await fsp.mkdir(AUDIO_CACHE, { recursive: true });
@@ -326,7 +328,7 @@ async function startScan(root) {
 
 // ---------------------------------------------------------------- routes
 
-const hosts = new Set([`127.0.0.1:${PORT}`, `localhost:${PORT}`]);
+const hosts = new Set();
 
 const server = http.createServer(async (req, res) => {
   res.setHeader('X-Content-Type-Options', 'nosniff');
@@ -432,24 +434,51 @@ const server = http.createServer(async (req, res) => {
 process.on('uncaughtException', (error) => console.error('Uncaught:', error));
 process.on('unhandledRejection', (error) => console.error('Unhandled:', error));
 
-server.on('error', (error) => {
-  if (error.code === 'EADDRINUSE') {
-    console.log(`Already running at http://127.0.0.1:${PORT}/`);
-    if (process.argv.includes('--open')) {
-      const url = `http://127.0.0.1:${PORT}/`;
-      const [cmd, args] = process.platform === 'win32' ? ['cmd', ['/c', 'start', '', url]] : process.platform === 'darwin' ? ['open', [url]] : ['xdg-open', [url]];
-      spawn(cmd, args, { stdio: 'ignore', detached: true }).on('error', () => {}).unref();
+const openBrowser = (url) => {
+  if (!process.argv.includes('--open')) return;
+  const [cmd, args] = process.platform === 'win32' ? ['cmd', ['/c', 'start', '', url]] : process.platform === 'darwin' ? ['open', [url]] : ['xdg-open', [url]];
+  spawn(cmd, args, { stdio: 'ignore', detached: true }).on('error', () => {}).unref();
+};
+const listen = (port) =>
+  new Promise((resolve, reject) => {
+    const onError = (error) => reject(error);
+    server.once('error', onError);
+    server.listen(port, '127.0.0.1', () => {
+      server.off('error', onError);
+      resolve();
+    });
+  });
+// Is this port already serving Sagrada × Lilith (a second double-click), or something else?
+async function whoIsAt(port) {
+  try {
+    const r = await fetch(`http://127.0.0.1:${port}/api/health`, { signal: AbortSignal.timeout(1500) });
+    return (await r.json()).app;
+  } catch {
+    return null;
+  }
+}
+for (let port = BASE_PORT; ; port++) {
+  if (port > BASE_PORT + 10) {
+    console.error(`Ports ${BASE_PORT}–${BASE_PORT + 10} are all busy. Set another one, e.g. PORT=42000.`);
+    process.exit(1);
+  }
+  try {
+    PORT = port;
+    hosts.clear();
+    hosts.add(`127.0.0.1:${port}`).add(`localhost:${port}`);
+    await listen(port);
+    const url = `http://127.0.0.1:${port}/`;
+    console.log(`Sagrada × Lilith: ${url}  (close this window or press Ctrl+C to stop)`);
+    openBrowser(url);
+    break;
+  } catch (error) {
+    if (error.code !== 'EADDRINUSE') throw error;
+    if ((await whoIsAt(port)) === 'sagrada-x-lilith') {
+      console.log(`Already running at http://127.0.0.1:${port}/`);
+      openBrowser(`http://127.0.0.1:${port}/`);
+      setTimeout(() => process.exit(0), 500);
+      break;
     }
-    setTimeout(() => process.exit(0), 500);
+    console.log(`Port ${port} is used by another program; trying ${port + 1}.`);
   }
-  throw error;
-});
-server.listen(PORT, '127.0.0.1', () => {
-  const url = `http://127.0.0.1:${PORT}/`;
-  console.log(`Sagrada × Lilith: ${url}  (close this window or press Ctrl+C to stop)`);
-  // --open (the starters): open it in the default browser
-  if (process.argv.includes('--open')) {
-    const [cmd, args] = process.platform === 'win32' ? ['cmd', ['/c', 'start', '', url]] : process.platform === 'darwin' ? ['open', [url]] : ['xdg-open', [url]];
-    spawn(cmd, args, { stdio: 'ignore', detached: true }).on('error', () => {}).unref();
-  }
-});
+}

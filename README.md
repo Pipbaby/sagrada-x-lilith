@@ -44,7 +44,7 @@ It runs on your own computer and works offline once installed.
      choose **Open**, then confirm)
    - **Linux:** run `sh "Start Sagrada x Lilith.command"` in a terminal
 4. The first start installs what it needs (about a minute, once). Then your browser opens at
-   <http://127.0.0.1:8770/>. Close the starter's window to stop it.
+   <http://127.0.0.1:41790/>. Close the starter's window to stop it.
 
 A graphics card helps: the basilica is about four million triangles with real-time sun shadows.
 On laptops with integrated graphics, choose **Settings › Quality › Low**.
@@ -79,7 +79,7 @@ The **?** button shows everything, in your language (**EN / CN / JP / ES**, top 
 
 ## For developers
 
-- `npm start` serves it on port 8770 (`PORT=…` to change); `npm test` runs the tests.
+- `npm start` serves it on port 41790 (`PORT=…` to change); `npm test` runs the tests.
 - **Code:** `web/src/building/` builds the basilica from its plan (`plan.js`): columns, vaults,
   walls and glass, galleries and stairs. `web/src/render/` holds the lighting: sun and glass
   shadow maps, bounce light, the baked light, post-processing. `web/src/player/` holds walking,
